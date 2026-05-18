@@ -1,0 +1,12 @@
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/bin/Debug/net8.0/MyRageMPServer.deps.json
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/bin/Debug/net8.0/MyRageMPServer.dll
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/bin/Debug/net8.0/MyRageMPServer.pdb
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/Debug/net8.0/MyRageMPServer.csproj.AssemblyReference.cache
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/Debug/net8.0/MyRageMPServer.GeneratedMSBuildEditorConfig.editorconfig
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/Debug/net8.0/MyRageMPServer.AssemblyInfoInputs.cache
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/Debug/net8.0/MyRageMPServer.AssemblyInfo.cs
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/Debug/net8.0/MyRageMPServer.csproj.CoreCompileInputs.cache
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/Debug/net8.0/MyRageMPServer.dll
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/Debug/net8.0/refint/MyRageMPServer.dll
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/Debug/net8.0/MyRageMPServer.pdb
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/Debug/net8.0/ref/MyRageMPServer.dll

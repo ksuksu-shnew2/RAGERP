@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "fs7VfSzfg3s=",
+  "success": true,
+  "projectFilePath": "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/MyRageMPServer.csproj",
+  "expectedPackageFiles": [
+    "/Users/sh_ksenya/.nuget/packages/alternatelife.ragemp.net/1.2.0/alternatelife.ragemp.net.1.2.0.nupkg.sha512",
+    "/Users/sh_ksenya/.nuget/packages/newtonsoft.json/12.0.2/newtonsoft.json.12.0.2.nupkg.sha512",
+    "/Users/sh_ksenya/.nuget/packages/nlog/4.6.3/nlog.4.6.3.nupkg.sha512",
+    "/Users/sh_ksenya/.nuget/packages/microsoft.netcore.app.ref/8.0.23/microsoft.netcore.app.ref.8.0.23.nupkg.sha512",
+    "/Users/sh_ksenya/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.23/microsoft.aspnetcore.app.ref.8.0.23.nupkg.sha512"
+  ],
+  "logs": []
+}
