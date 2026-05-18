@@ -8,7 +8,7 @@ public class Main
 {
     public Main()
     {
-        MP.Logger.Info("=== Сервер запущен! ===");
+        MP.Logger.Info("=== Сервер запущен! Проверим ===");
 
         MP.Events.PlayerJoin += OnPlayerJoin;
         MP.Events.PlayerQuit += OnPlayerQuit;

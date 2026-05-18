@@ -1,0 +1,29 @@
+# Сборка .NET
+bin/
+obj/
+
+# Кеш VS Code
+.vscode/
+
+# Файлы пользователя Visual Studio (если вдруг откроешь там)
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Логи
+*.log
+
+# Временные файлы
+*.tmp
+*.temp
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+
+# Файлы ОС
+.DS_Store
+Thumbs.db
