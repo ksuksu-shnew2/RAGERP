@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Bootstrapper">
-      <HintPath>ragemp-srv/dotnet/runtime/Bootstrapper.dll</HintPath>
+      <HintPath>Bootstrapper.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
