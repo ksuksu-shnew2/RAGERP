@@ -1,0 +1,6 @@
+/workspaces/RAGERP/obj/Debug/netcoreapp2.2/MyRageMPServer.csproj.AssemblyReference.cache
+/workspaces/RAGERP/obj/Debug/netcoreapp2.2/MyRageMPServer.GeneratedMSBuildEditorConfig.editorconfig
+/workspaces/RAGERP/obj/Debug/netcoreapp2.2/MyRageMPServer.AssemblyInfoInputs.cache
+/workspaces/RAGERP/obj/Debug/netcoreapp2.2/MyRageMPServer.AssemblyInfo.cs
+/workspaces/RAGERP/obj/Debug/netcoreapp2.2/MyRageMPServer.csproj.CoreCompileInputs.cache
+/workspaces/RAGERP/obj/Debug/netcoreapp2.2/MyRageMPServer.sourcelink.json

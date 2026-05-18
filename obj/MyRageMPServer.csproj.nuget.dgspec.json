@@ -1,30 +1,30 @@
 {
   "format": 1,
   "restore": {
-    "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/MyRageMPServer.csproj": {}
+    "/workspaces/RAGERP/MyRageMPServer.csproj": {}
   },
   "projects": {
-    "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/MyRageMPServer.csproj": {
+    "/workspaces/RAGERP/MyRageMPServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/MyRageMPServer.csproj",
+        "projectUniqueName": "/workspaces/RAGERP/MyRageMPServer.csproj",
         "projectName": "MyRageMPServer",
-        "projectPath": "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/MyRageMPServer.csproj",
-        "packagesPath": "/Users/sh_ksenya/.nuget/packages/",
-        "outputPath": "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/",
+        "projectPath": "/workspaces/RAGERP/MyRageMPServer.csproj",
+        "packagesPath": "/home/codespace/.nuget/packages/",
+        "outputPath": "/workspaces/RAGERP/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/sh_ksenya/.nuget/NuGet/NuGet.Config"
+          "/home/codespace/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
-          "net8.0"
+          "netcoreapp2.2"
         ],
         "sources": {
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
+          "netcoreapp2.2": {
+            "targetAlias": "netcoreapp2.2",
             "projectReferences": {}
           }
         },
@@ -38,15 +38,21 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.100"
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
+        "netcoreapp2.2": {
+          "targetAlias": "netcoreapp2.2",
           "dependencies": {
             "AlternateLife.RageMP.Net": {
               "target": "Package",
               "version": "[1.2.0, )"
+            },
+            "Microsoft.NETCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )",
+              "autoReferenced": true
             }
           },
           "imports": [
@@ -60,22 +66,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.23, 8.0.23]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.23, 8.0.23]"
-            }
-          ],
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.102/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.200/RuntimeIdentifierGraph.json"
         }
       }
     }
