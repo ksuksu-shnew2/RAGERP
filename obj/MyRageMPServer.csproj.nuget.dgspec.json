@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/workspaces/RAGERP/MyRageMPServer.csproj": {}
+    "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/MyRageMPServer.csproj": {}
   },
   "projects": {
-    "/workspaces/RAGERP/MyRageMPServer.csproj": {
+    "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/MyRageMPServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/workspaces/RAGERP/MyRageMPServer.csproj",
+        "projectUniqueName": "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/MyRageMPServer.csproj",
         "projectName": "MyRageMPServer",
-        "projectPath": "/workspaces/RAGERP/MyRageMPServer.csproj",
-        "packagesPath": "/home/codespace/.nuget/packages/",
-        "outputPath": "/workspaces/RAGERP/obj/",
+        "projectPath": "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/MyRageMPServer.csproj",
+        "packagesPath": "/Users/sh_ksenya/.nuget/packages/",
+        "outputPath": "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/codespace/.nuget/NuGet/NuGet.Config"
+          "/Users/sh_ksenya/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp2.2"
@@ -38,7 +38,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.200"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "netcoreapp2.2": {
@@ -66,7 +66,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.200/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.102/RuntimeIdentifierGraph.json"
         }
       }
     }

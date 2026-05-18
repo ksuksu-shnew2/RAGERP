@@ -1,6 +1,11 @@
-/workspaces/RAGERP/obj/Debug/netcoreapp2.2/MyRageMPServer.csproj.AssemblyReference.cache
-/workspaces/RAGERP/obj/Debug/netcoreapp2.2/MyRageMPServer.GeneratedMSBuildEditorConfig.editorconfig
-/workspaces/RAGERP/obj/Debug/netcoreapp2.2/MyRageMPServer.AssemblyInfoInputs.cache
-/workspaces/RAGERP/obj/Debug/netcoreapp2.2/MyRageMPServer.AssemblyInfo.cs
-/workspaces/RAGERP/obj/Debug/netcoreapp2.2/MyRageMPServer.csproj.CoreCompileInputs.cache
-/workspaces/RAGERP/obj/Debug/netcoreapp2.2/MyRageMPServer.sourcelink.json
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/bin/Debug/netcoreapp2.2/MyRageMPServer.deps.json
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/bin/Debug/netcoreapp2.2/MyRageMPServer.dll
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/bin/Debug/netcoreapp2.2/MyRageMPServer.pdb
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/Debug/netcoreapp2.2/MyRageMPServer.csproj.AssemblyReference.cache
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/Debug/netcoreapp2.2/MyRageMPServer.GeneratedMSBuildEditorConfig.editorconfig
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/Debug/netcoreapp2.2/MyRageMPServer.AssemblyInfoInputs.cache
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/Debug/netcoreapp2.2/MyRageMPServer.AssemblyInfo.cs
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/Debug/netcoreapp2.2/MyRageMPServer.csproj.CoreCompileInputs.cache
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/Debug/netcoreapp2.2/MyRageMPServer.sourcelink.json
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/Debug/netcoreapp2.2/MyRageMPServer.dll
+/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/obj/Debug/netcoreapp2.2/MyRageMPServer.pdb

@@ -1,55 +1,55 @@
 {
   "version": 2,
-  "dgSpecHash": "mANTZ3P+H+E=",
+  "dgSpecHash": "8AnEQOnswBQ=",
   "success": true,
-  "projectFilePath": "/workspaces/RAGERP/MyRageMPServer.csproj",
+  "projectFilePath": "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/MyRageMPServer.csproj",
   "expectedPackageFiles": [
-    "/home/codespace/.nuget/packages/alternatelife.ragemp.net/1.2.0/alternatelife.ragemp.net.1.2.0.nupkg.sha512",
-    "/home/codespace/.nuget/packages/microsoft.netcore.app/2.2.0/microsoft.netcore.app.2.2.0.nupkg.sha512",
-    "/home/codespace/.nuget/packages/microsoft.netcore.dotnetapphost/2.2.0/microsoft.netcore.dotnetapphost.2.2.0.nupkg.sha512",
-    "/home/codespace/.nuget/packages/microsoft.netcore.dotnethostpolicy/2.2.0/microsoft.netcore.dotnethostpolicy.2.2.0.nupkg.sha512",
-    "/home/codespace/.nuget/packages/microsoft.netcore.dotnethostresolver/2.2.0/microsoft.netcore.dotnethostresolver.2.2.0.nupkg.sha512",
-    "/home/codespace/.nuget/packages/microsoft.netcore.platforms/2.2.0/microsoft.netcore.platforms.2.2.0.nupkg.sha512",
-    "/home/codespace/.nuget/packages/microsoft.netcore.targets/2.0.0/microsoft.netcore.targets.2.0.0.nupkg.sha512",
-    "/home/codespace/.nuget/packages/netstandard.library/2.0.3/netstandard.library.2.0.3.nupkg.sha512",
-    "/home/codespace/.nuget/packages/newtonsoft.json/12.0.2/newtonsoft.json.12.0.2.nupkg.sha512",
-    "/home/codespace/.nuget/packages/nlog/4.6.3/nlog.4.6.3.nupkg.sha512"
+    "/Users/sh_ksenya/.nuget/packages/alternatelife.ragemp.net/1.2.0/alternatelife.ragemp.net.1.2.0.nupkg.sha512",
+    "/Users/sh_ksenya/.nuget/packages/microsoft.netcore.app/2.2.0/microsoft.netcore.app.2.2.0.nupkg.sha512",
+    "/Users/sh_ksenya/.nuget/packages/microsoft.netcore.dotnetapphost/2.2.0/microsoft.netcore.dotnetapphost.2.2.0.nupkg.sha512",
+    "/Users/sh_ksenya/.nuget/packages/microsoft.netcore.dotnethostpolicy/2.2.0/microsoft.netcore.dotnethostpolicy.2.2.0.nupkg.sha512",
+    "/Users/sh_ksenya/.nuget/packages/microsoft.netcore.dotnethostresolver/2.2.0/microsoft.netcore.dotnethostresolver.2.2.0.nupkg.sha512",
+    "/Users/sh_ksenya/.nuget/packages/microsoft.netcore.platforms/2.2.0/microsoft.netcore.platforms.2.2.0.nupkg.sha512",
+    "/Users/sh_ksenya/.nuget/packages/microsoft.netcore.targets/2.0.0/microsoft.netcore.targets.2.0.0.nupkg.sha512",
+    "/Users/sh_ksenya/.nuget/packages/netstandard.library/2.0.3/netstandard.library.2.0.3.nupkg.sha512",
+    "/Users/sh_ksenya/.nuget/packages/newtonsoft.json/12.0.2/newtonsoft.json.12.0.2.nupkg.sha512",
+    "/Users/sh_ksenya/.nuget/packages/nlog/4.6.3/nlog.4.6.3.nupkg.sha512"
   ],
   "logs": [
     {
       "code": "NU1903",
       "level": "Warning",
       "message": "Package 'Microsoft.NETCore.App' 2.2.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-2xjx-v99w-gqf3",
-      "projectPath": "/workspaces/RAGERP/MyRageMPServer.csproj",
+      "projectPath": "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/MyRageMPServer.csproj",
       "warningLevel": 1,
-      "filePath": "/workspaces/RAGERP/MyRageMPServer.csproj",
+      "filePath": "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/MyRageMPServer.csproj",
       "libraryId": "Microsoft.NETCore.App",
       "targetGraphs": [
-        "netcoreapp2.2"
+        ".NETCoreApp,Version=v2.2"
       ]
     },
     {
       "code": "NU1903",
       "level": "Warning",
       "message": "Package 'Microsoft.NETCore.App' 2.2.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-6px8-22w5-w334",
-      "projectPath": "/workspaces/RAGERP/MyRageMPServer.csproj",
+      "projectPath": "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/MyRageMPServer.csproj",
       "warningLevel": 1,
-      "filePath": "/workspaces/RAGERP/MyRageMPServer.csproj",
+      "filePath": "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/MyRageMPServer.csproj",
       "libraryId": "Microsoft.NETCore.App",
       "targetGraphs": [
-        "netcoreapp2.2"
+        ".NETCoreApp,Version=v2.2"
       ]
     },
     {
       "code": "NU1902",
       "level": "Warning",
       "message": "Package 'Microsoft.NETCore.App' 2.2.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-x5qj-9vmx-7g6g",
-      "projectPath": "/workspaces/RAGERP/MyRageMPServer.csproj",
+      "projectPath": "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/MyRageMPServer.csproj",
       "warningLevel": 1,
-      "filePath": "/workspaces/RAGERP/MyRageMPServer.csproj",
+      "filePath": "/Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/MyRageMPServer.csproj",
       "libraryId": "Microsoft.NETCore.App",
       "targetGraphs": [
-        "netcoreapp2.2"
+        ".NETCoreApp,Version=v2.2"
       ]
     }
   ]

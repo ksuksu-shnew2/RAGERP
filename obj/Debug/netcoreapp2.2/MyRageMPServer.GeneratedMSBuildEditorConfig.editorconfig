@@ -1,6 +1,6 @@
 is_global = true
 build_property.RootNamespace = MyRageMPServer
-build_property.ProjectDir = /workspaces/RAGERP/
+build_property.ProjectDir = /Users/sh_ksenya/Documents/RAGEMP/MyRageMPServer/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.CsWinRTUseWindowsUIXamlProjections = false
