@@ -1,0 +1,11 @@
+obj/
+bin/
+*.user
+.vs/
+ragemp-srv/
+*.tar.gz
+*.zip
+win/
+win_server/
+Bootstrapper.dll
+GTANetworkAPI.dll
