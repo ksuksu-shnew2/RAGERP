@@ -1,27 +1,26 @@
-using AlternateLife.RageMP.Net.Scripting;
-using AlternateLife.RageMP.Net.EventArgs;
+using System;
+using GTANetworkAPI;
 
 namespace MyRageMPServer
 {
-    public class Main
+    public class Main : Script
     {
-        public Main()
+        [ServerEvent(Event.ResourceStart)]
+        public void OnResourceStart()
         {
-            MP.Logger.Info("=== Сервер запущен! ===");
-            MP.Events.PlayerJoin += OnPlayerJoin;
-            MP.Events.PlayerQuit += OnPlayerQuit;
+            NAPI.Util.ConsoleOutput("=== Сервер запущен! ===");
         }
 
-        private async System.Threading.Tasks.Task OnPlayerJoin(object sender, PlayerEventArgs e)
+        [ServerEvent(Event.PlayerConnected)]
+        public void OnPlayerConnected(Player player)
         {
-            var name = await e.Player.GetNameAsync();
-            await e.Player.OutputChatBoxAsync("Добро пожаловать, " + name + "!");
-            MP.Logger.Info(name + " зашёл на сервер!");
+            NAPI.Chat.SendChatMessageToAll("[+] " + player.Name + " зашёл на сервер!");
         }
 
-        private void OnPlayerQuit(object sender, PlayerQuitEventArgs e)
+        [ServerEvent(Event.PlayerDisconnected)]
+        public void OnPlayerDisconnected(Player player, DisconnectionType type, string reason)
         {
-            MP.Logger.Info("Игрок вышел: " + e.Reason);
+            NAPI.Chat.SendChatMessageToAll("[-] " + player.Name + " вышел с сервера.");
         }
     }
 }
