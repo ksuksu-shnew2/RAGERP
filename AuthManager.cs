@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using GTANetworkAPI;
 using System.Security.Cryptography;
+using MySql.Data.MySqlClient;
 
 namespace MyRageMPServer
 {
     public class AuthManager
     {
         private Dictionary<Player, PlayerData> _authorizedPlayers = new Dictionary<Player, PlayerData>();
+        private string _connectionString = "Server=localhost;Database=ragemp;User=ragemp;Password=password123;";
 
         public bool Register(Player player, string login, string password)
         {
@@ -22,8 +24,11 @@ namespace MyRageMPServer
                 CreatedAt = DateTime.UtcNow
             };
 
+            CreatePlayer(playerData); // сохраняем в БД
             _authorizedPlayers[player] = playerData;
             return true;
+
+            
         }
 
         public PlayerData Login(Player player,string login, string password)
@@ -36,6 +41,7 @@ namespace MyRageMPServer
                     _authorizedPlayers[player] = playerData;
                     return playerData;
                 }
+
             }
             return null; // Invalid login or password
             
@@ -43,7 +49,11 @@ namespace MyRageMPServer
 
         public void Logout(Player player)
         {
-            _authorizedPlayers.Remove(player);
+           if (_authorizedPlayers.TryGetValue(player, out var playerData))
+                {
+                    UpdatePlayer(playerData); // сохраняем в БД
+                    _authorizedPlayers.Remove(player);
+                }
         } 
 
         public bool IsAuthorized(Player player)
@@ -75,7 +85,68 @@ namespace MyRageMPServer
 
         private PlayerData FindPlayer(string login)
             {
-                return null; // реализуем когда подключим MySQL
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open(); // открываем соединение
+                    
+                    var cmd = new MySqlCommand("SELECT * FROM players WHERE login = @login", connection);
+                    cmd.Parameters.AddWithValue("@login", login); // защита от SQL инъекций
+                    
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read()) // если нашли запись
+                        {
+                            return new PlayerData
+                            {
+                                Id = reader.GetInt32("id"),
+                                Login = reader.GetString("login"),
+                                PasswordHash = reader.GetString("password_hash"),
+                                Money = reader.GetInt32("money"),
+                                Health = reader.GetFloat("health"),
+                                PosX = reader.GetFloat("pos_x"),
+                                PosY = reader.GetFloat("pos_y"),
+                                PosZ = reader.GetFloat("pos_z"),
+                            };
+                        }
+                    }
+                }
+                return null; // не нашли
             }
+        private PlayerData CreatePlayer(PlayerData playerData)
+        {
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                connection.Open();
+                var cmd = new MySqlCommand("INSERT INTO players (login, password_hash, created_at) VALUES (@login, @password_hash, @created_at); SELECT LAST_INSERT_ID();", connection);
+                cmd.Parameters.AddWithValue("@login", playerData.Login);
+                cmd.Parameters.AddWithValue("@password_hash", playerData.PasswordHash);
+                cmd.Parameters.AddWithValue("@created_at", playerData.CreatedAt);
+
+                var id = Convert.ToInt32(cmd.ExecuteScalar());
+                playerData.Id = id;
+                return playerData;
+            }
+        }
+
+        private PlayerData UpdatePlayer(PlayerData playerData)
+        {
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                connection.Open();
+                var cmd = new MySqlCommand("UPDATE players SET money=@money, health=@health, pos_x=@pos_x, pos_y=@pos_y, pos_z=@pos_z, last_login=@last_login WHERE id=@id", connection);
+            
+                cmd.Parameters.AddWithValue("@id", playerData.Id);
+                cmd.Parameters.AddWithValue("@money", playerData.Money);
+                cmd.Parameters.AddWithValue("@health", playerData.Health);
+                cmd.Parameters.AddWithValue("@pos_x", playerData.PosX);
+                cmd.Parameters.AddWithValue("@pos_y", playerData.PosY);
+                cmd.Parameters.AddWithValue("@pos_z", playerData.PosZ);
+                cmd.Parameters.AddWithValue("@last_login", playerData.LastLogin);
+
+                cmd.ExecuteNonQuery();
+                return playerData;
+            }
+        }
+
     }
 }
