@@ -59,6 +59,7 @@ namespace MyRageMPServer
         {
             
             player.SendChatMessage("Введи /register логин пароль или /login логин пароль для авторизации.");
+            player.TriggerEvent("playerJoinedServer", player.Name);
             
         }
 
