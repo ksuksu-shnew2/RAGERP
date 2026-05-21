@@ -54,42 +54,93 @@ namespace MyRageMPServer
                     player.SendChatMessage("Ошибка: Ты не авторизован. Введи /login для входа.");
                 }
             }
-            [Command("stats")]
-        public void StatsCommand(Player player)
-        {
-            if (_auth.IsAuthorized(player))
+        [Command("stats")]
+            public void StatsCommand(Player player)
             {
-                var playerData = _auth.GetPlayerData(player);
-                player.SendChatMessage($"Уровень: {playerData.Level}, Опыт: {playerData.Experience}");
+                if (_auth.IsAuthorized(player))
+                {
+                    var playerData = _auth.GetPlayerData(player);
+                    player.SendChatMessage($"Уровень: {playerData.Level}, Опыт: {playerData.Experience}");
+                }
+                else
+                {
+                    player.SendChatMessage("Ошибка: Ты не авторизован. Введи /login для входа.");
+                }
             }
-            else
+        [Command("givemoney")]
+            public void GiveMoneyCommand(Player player, int amount)
             {
-                player.SendChatMessage("Ошибка: Ты не авторизован. Введи /login для входа.");
+                if (_auth.IsAuthorized(player))
+                {
+                    _auth.GiveMoney(player, amount);
+                    player.SendChatMessage($"Тебе было добавлено ${amount}.");
+                }
+                else
+                {
+                    player.SendChatMessage("Ошибка: Ты не авторизован. Введи /login для входа.");
+                }
             }
-        }
+        [Command("takemoney")]
+            public void TakeMoneyCommand(Player player, int amount)
+            {
+                if (_auth.IsAuthorized(player))
+                {
+                    if (_auth.TakeMoney(player, amount))
+                    {
+                        player.SendChatMessage($"У тебя было снято ${amount}.");
+                    }
+                    else                    {
+                        player.SendChatMessage("Ошибка: Недостаточно средств.");
+                    }
+                }
+                else                {
+                    player.SendChatMessage("Ошибка: Ты не авторизован. Введи /login для входа.");
+                }
+            }
+        [Command("pay")]
+        public void PayCommand(Player player, Player target, int amount)
+            {
+                if (_auth.IsAuthorized(player))
+                {
+                    if (_auth.TakeMoney(player, amount))
+                    {
+                        _auth.GiveMoney(target, amount);
+                        player.SendChatMessage($"Ты заплатил ${amount} игроку {target.Name}.");
+                        target.SendChatMessage($"Ты получил ${amount} от игрока {player.Name}.");
+                    }
+                    else
+                    {
+                        player.SendChatMessage("Ошибка: Недостаточно средств для оплаты.");
+                    }
+                }
+                else
+                {
+                    player.SendChatMessage("Ошибка: Ты не авторизован. Введи /login для входа.");
+                }
+            }
         [ServerEvent(Event.PlayerConnected)]
-        public void OnPlayerConnected(Player player)
-        {
-            
-            player.SendChatMessage("Введи /register логин пароль или /login логин пароль для авторизации.");
-            player.TriggerEvent("playerJoinedServer", player.Name);
-            
-        }
+            public void OnPlayerConnected(Player player)
+            {
+                
+                player.SendChatMessage("Введи /register логин пароль или /login логин пароль для авторизации.");
+                player.TriggerEvent("playerJoinedServer", player.Name);
+                
+            }
 
         [ServerEvent(Event.PlayerDisconnected)]
-        public void OnPlayerDisconnected(Player player, DisconnectionType type, string reason)
-        {
-            var playerData = _auth.GetPlayerData(player);
-            if (playerData != null)
+            public void OnPlayerDisconnected(Player player, DisconnectionType type, string reason)
             {
-                playerData.PosX = player.Position.X;
-                playerData.PosY = player.Position.Y;
-                playerData.PosZ = player.Position.Z;
-                playerData.Health = player.Health;
-            }
-            
-            _auth.Logout(player); 
+                var playerData = _auth.GetPlayerData(player);
+                if (playerData != null)
+                {
+                    playerData.PosX = player.Position.X;
+                    playerData.PosY = player.Position.Y;
+                    playerData.PosZ = player.Position.Z;
+                    playerData.Health = player.Health;
+                }
                 
-        }
+                _auth.Logout(player); 
+                    
+            }
     }
 }

@@ -185,5 +185,30 @@ namespace MyRageMPServer
             }
         }
 
+        public void GiveMoney(Player player, int amount)
+        {
+            if (IsAuthorized(player))
+            {
+                var playerData = GetPlayerData(player);
+                playerData.Money += amount;
+                UpdatePlayer(playerData);
+            }
+        }
+
+        public bool TakeMoney(Player player, int amount)
+        {
+            if (IsAuthorized(player))
+            {
+                var playerData = GetPlayerData(player);
+                if (playerData.Money >= amount)
+                {
+                    playerData.Money -= amount;
+                    UpdatePlayer(playerData);
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }
 }
