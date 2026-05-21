@@ -106,6 +106,8 @@ namespace MyRageMPServer
                                 PosX = reader.GetFloat("pos_x"),
                                 PosY = reader.GetFloat("pos_y"),
                                 PosZ = reader.GetFloat("pos_z"),
+                                Level = reader.GetInt32("level"),
+                                Experience = reader.GetInt32("experience")
                             };
                         }
                     }
@@ -133,7 +135,7 @@ namespace MyRageMPServer
             using (var connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                var cmd = new MySqlCommand("UPDATE players SET money=@money, health=@health, pos_x=@pos_x, pos_y=@pos_y, pos_z=@pos_z, last_login=@last_login WHERE id=@id", connection);
+                var cmd = new MySqlCommand("UPDATE players SET money=@money, health=@health, pos_x=@pos_x, pos_y=@pos_y, pos_z=@pos_z, last_login=@last_login, level=@level, experience=@experience WHERE id=@id", connection);
             
                 cmd.Parameters.AddWithValue("@id", playerData.Id);
                 cmd.Parameters.AddWithValue("@money", playerData.Money);
@@ -142,9 +144,44 @@ namespace MyRageMPServer
                 cmd.Parameters.AddWithValue("@pos_y", playerData.PosY);
                 cmd.Parameters.AddWithValue("@pos_z", playerData.PosZ);
                 cmd.Parameters.AddWithValue("@last_login", playerData.LastLogin);
+                cmd.Parameters.AddWithValue("@level", playerData.Level);
+                cmd.Parameters.AddWithValue("@experience", playerData.Experience);
 
                 cmd.ExecuteNonQuery();
                 return playerData;
+            }
+        }
+
+        public void AddExperience(Player player, int amount)
+        {
+            if (IsAuthorized(player))
+            {
+                var playerData = GetPlayerData(player);
+                playerData.Experience += amount;
+                if (playerData.Experience >= GetExperienceForNextLevel(playerData.Level))
+                {
+                    playerData.Level++;
+                    playerData.Experience = 0;
+                    player.SendChatMessage($"Поздравляем! Ты достиг уровня {playerData.Level}!");
+                }
+                UpdatePlayer(playerData);
+            }
+        }
+
+        private int GetExperienceForNextLevel(int level)
+        {
+            return 100 * level; // простая формула для примера
+        }
+
+        public void LevelUp(Player player)
+        {
+            if (IsAuthorized(player))
+            {
+                var playerData = GetPlayerData(player);
+                playerData.Level++;
+                playerData.Experience = 0;
+                UpdatePlayer(playerData);
+                player.SendChatMessage($"Поздравляем! Ты достиг уровня {playerData.Level}!");
             }
         }
 

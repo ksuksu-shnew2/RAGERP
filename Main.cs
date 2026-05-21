@@ -54,6 +54,19 @@ namespace MyRageMPServer
                     player.SendChatMessage("Ошибка: Ты не авторизован. Введи /login для входа.");
                 }
             }
+            [Command("stats")]
+        public void StatsCommand(Player player)
+        {
+            if (_auth.IsAuthorized(player))
+            {
+                var playerData = _auth.GetPlayerData(player);
+                player.SendChatMessage($"Уровень: {playerData.Level}, Опыт: {playerData.Experience}");
+            }
+            else
+            {
+                player.SendChatMessage("Ошибка: Ты не авторизован. Введи /login для входа.");
+            }
+        }
         [ServerEvent(Event.PlayerConnected)]
         public void OnPlayerConnected(Player player)
         {

@@ -12,5 +12,7 @@ namespace MyRageMPServer
         public float PosX, PosY, PosZ;
         public DateTime CreatedAt;
         public DateTime LastLogin;
+        public int Level = 1;
+        public int Experience = 0;
     }
 }
