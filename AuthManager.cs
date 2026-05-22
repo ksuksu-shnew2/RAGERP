@@ -107,7 +107,8 @@ namespace MyRageMPServer
                                 PosY = reader.GetFloat("pos_y"),
                                 PosZ = reader.GetFloat("pos_z"),
                                 Level = reader.GetInt32("level"),
-                                Experience = reader.GetInt32("experience")
+                                Experience = reader.GetInt32("experience"),
+                                AdminLevel = reader.GetInt32("admin_level")
                             };
                         }
                     }
@@ -135,7 +136,7 @@ namespace MyRageMPServer
             using (var connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                var cmd = new MySqlCommand("UPDATE players SET money=@money, health=@health, pos_x=@pos_x, pos_y=@pos_y, pos_z=@pos_z, last_login=@last_login, level=@level, experience=@experience WHERE id=@id", connection);
+                var cmd = new MySqlCommand("UPDATE players SET money=@money, health=@health, pos_x=@pos_x, pos_y=@pos_y, pos_z=@pos_z, last_login=@last_login, level=@level, experience=@experience, admin_level=@admin_level WHERE id=@id", connection);
             
                 cmd.Parameters.AddWithValue("@id", playerData.Id);
                 cmd.Parameters.AddWithValue("@money", playerData.Money);
@@ -146,7 +147,7 @@ namespace MyRageMPServer
                 cmd.Parameters.AddWithValue("@last_login", playerData.LastLogin);
                 cmd.Parameters.AddWithValue("@level", playerData.Level);
                 cmd.Parameters.AddWithValue("@experience", playerData.Experience);
-
+                cmd.Parameters.AddWithValue("@admin_level", playerData.AdminLevel);
                 cmd.ExecuteNonQuery();
                 return playerData;
             }
@@ -208,6 +209,22 @@ namespace MyRageMPServer
                 }
             }
             return false;
+        }
+
+        public bool IsAdmin(Player player, int minLevel = 1)
+            {
+                var playerData = GetPlayerData(player);
+                return playerData != null && playerData.AdminLevel >= minLevel;
+            }
+        public void SetAdminLevel(Player player, int level)
+        {
+            if (IsAuthorized(player))
+            {
+                var playerData = GetPlayerData(player);
+                playerData.AdminLevel = level;
+                UpdatePlayer(playerData);
+                player.SendChatMessage($"Твой админ уровень был установлен на {level}.");
+            }
         }
 
     }

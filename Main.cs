@@ -142,5 +142,31 @@ namespace MyRageMPServer
                 _auth.Logout(player); 
                     
             }
+        [Command("kick")]
+            public void KickCommand(Player player, Player target, string reason)
+            {
+                if (_auth.IsAdmin(player))
+                {
+                    target.Kick(reason);
+                    player.SendChatMessage($"Игрок {target.Name} был кикнут. Причина: {reason}");
+                }
+                else
+                {
+                    player.SendChatMessage("Ошибка: У тебя нет прав для выполнения этой команды.");
+                }
+            }
+        [Command("setadmin")]
+            public void SetAdminCommand(Player player, Player target, int level)
+            {
+                if (_auth.IsAdmin(player, 3))
+                {
+                    _auth.SetAdminLevel(target, level);
+                    player.SendChatMessage($"У игрока {target.Name} теперь уровень администратора: {level}");
+                }
+                else
+                {
+                    player.SendChatMessage("Ошибка: У тебя нет прав для выполнения этой команды.");
+                }
+            }
     }
 }

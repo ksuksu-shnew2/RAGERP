@@ -14,5 +14,6 @@ namespace MyRageMPServer
         public DateTime LastLogin;
         public int Level = 1;
         public int Experience = 0;
+        public int AdminLevel;
     }
 }
