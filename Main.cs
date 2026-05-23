@@ -6,6 +6,13 @@ namespace MyRageMPServer
     public class Main : Script
     {  
         public AuthManager _auth = new AuthManager();
+        public InventoryManager _inventory;
+
+        public Main()
+        {
+            _inventory = new InventoryManager(_auth);
+        }
+
         [ServerEvent(Event.ResourceStart)]
         public void OnResourceStart()
         {
@@ -225,6 +232,28 @@ namespace MyRageMPServer
                     player.SendChatMessage("Ошибка: У тебя нет прав для выполнения этой команды.");
                 }
             }
-        
+        [Command("inventory")]
+            public void InventoryCommand(Player player)
+            {
+                var inventory = _inventory.GetInventory(player);
+                if (inventory.Count == 0)
+                    {
+                        player.SendChatMessage("Твой инвентарь пуст.");
+                        return;
+                    }
+                    foreach (var item in inventory)
+                        player.SendChatMessage($"{item.Key}: {item.Value} шт.");
+            }
+        [Command("giveitem")]
+            public void AddItemCommand(Player player, string item, int quantity)
+            {
+                _inventory.AddItem(player, item, quantity);
+                player.SendChatMessage($"Ты получил {quantity}x {item}.");
+            }
+        [Command("useitem")]
+            public void UseItemCommand(Player player, string item)
+            {
+                _inventory.UseItem(player, item);
+            }
     }
 }

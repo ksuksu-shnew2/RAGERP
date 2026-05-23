@@ -133,7 +133,7 @@ namespace MyRageMPServer
             }
         }
 
-        private PlayerData UpdatePlayer(PlayerData playerData)
+        public PlayerData UpdatePlayer(PlayerData playerData)
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
