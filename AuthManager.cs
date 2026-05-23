@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GTANetworkAPI;
 using System.Security.Cryptography;
 using MySql.Data.MySqlClient;
-using Org.BouncyCastle.Asn1.X509;
+
 
 namespace MyRageMPServer
 {
@@ -109,7 +109,8 @@ namespace MyRageMPServer
                                 PosZ = reader.GetFloat("pos_z"),
                                 Level = reader.GetInt32("level"),
                                 Experience = reader.GetInt32("experience"),
-                                AdminLevel = reader.GetInt32("admin_level")
+                                AdminLevel = reader.GetInt32("admin_level"),
+                                IsMuted = reader.GetBoolean("is_muted")
                             };
                         }
                     }
@@ -137,7 +138,7 @@ namespace MyRageMPServer
             using (var connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                var cmd = new MySqlCommand("UPDATE players SET money=@money, health=@health, pos_x=@pos_x, pos_y=@pos_y, pos_z=@pos_z, last_login=@last_login, level=@level, experience=@experience, admin_level=@admin_level WHERE id=@id", connection);
+                var cmd = new MySqlCommand("UPDATE players SET money=@money, health=@health, pos_x=@pos_x, pos_y=@pos_y, pos_z=@pos_z, last_login=@last_login, level=@level, experience=@experience, admin_level=@admin_level, is_muted=@is_muted WHERE id=@id", connection);
             
                 cmd.Parameters.AddWithValue("@id", playerData.Id);
                 cmd.Parameters.AddWithValue("@money", playerData.Money);
@@ -149,6 +150,7 @@ namespace MyRageMPServer
                 cmd.Parameters.AddWithValue("@level", playerData.Level);
                 cmd.Parameters.AddWithValue("@experience", playerData.Experience);
                 cmd.Parameters.AddWithValue("@admin_level", playerData.AdminLevel);
+                cmd.Parameters.AddWithValue("@is_muted", playerData.IsMuted);
                 cmd.ExecuteNonQuery();
                 return playerData;
             }
@@ -269,6 +271,33 @@ namespace MyRageMPServer
                 var cmd = new MySqlCommand("DELETE FROM bans WHERE login = @login", connection);
                 cmd.Parameters.AddWithValue("@login", login);
                 cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void MutePlayer(Player admin, Player target)
+        {
+            if (IsAdmin(admin))
+            {
+                var targetData = GetPlayerData(target);
+                if (targetData != null)
+                {
+                    targetData.IsMuted = true;
+                    UpdatePlayer(targetData);
+                    target.SendChatMessage($"Ты был замучен администратором {admin.Name} и не можешь отправлять сообщения в чат.");
+                }
+            }
+        }
+        public void UnmutePlayer(Player admin, Player target)
+        {
+            if (IsAdmin(admin))
+            {
+                var targetData = GetPlayerData(target);
+                if (targetData != null)
+                {
+                    targetData.IsMuted = false;
+                    UpdatePlayer(targetData);
+                    target.SendChatMessage($"Ты был размучен администратором {admin.Name} и теперь можешь отправлять сообщения в чат.");
+                }
             }
         }
 

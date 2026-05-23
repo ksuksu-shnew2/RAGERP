@@ -201,5 +201,30 @@ namespace MyRageMPServer
                     player.SendChatMessage("Ошибка: У тебя нет прав для выполнения этой команды.");
                 }
             }
+        [Command("mute")]
+            public void MuteCommand(Player player, Player target)
+            {
+                if (_auth.IsAdmin(player))
+                {
+                    _auth.MutePlayer(player, target);
+                }
+                else
+                {
+                    player.SendChatMessage("Ошибка: У тебя нет прав для выполнения этой команды.");
+                }
+            }
+        [Command("unmute")]
+            public void UnmuteCommand(Player player, Player target)
+            {
+                if (_auth.IsAdmin(player))
+                {
+                    _auth.UnmutePlayer(player, target);
+                }
+                else
+                {
+                    player.SendChatMessage("Ошибка: У тебя нет прав для выполнения этой команды.");
+                }
+            }
+        
     }
 }

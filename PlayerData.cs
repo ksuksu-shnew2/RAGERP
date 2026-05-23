@@ -15,5 +15,6 @@ namespace MyRageMPServer
         public int Level = 1;
         public int Experience = 0;
         public int AdminLevel;
+        public bool IsMuted;
     }
 }
