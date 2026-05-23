@@ -8,9 +8,12 @@ namespace MyRageMPServer
         public AuthManager _auth = new AuthManager();
         public InventoryManager _inventory;
 
+        public VehicleManager _vehicle;
+
         public Main()
         {
             _inventory = new InventoryManager(_auth);
+            _vehicle = new VehicleManager(_auth);
         }
 
         [ServerEvent(Event.ResourceStart)]
@@ -255,5 +258,29 @@ namespace MyRageMPServer
             {
                 _inventory.UseItem(player, item);
             }
+        [Command("buycar")]
+            public void BuyCarCommand(Player player, string model)
+            {
+                _vehicle.BuyCar(player, model);
+            }
+        [Command("spawncar")]
+            public void SpawnCarCommand(Player player, string model)
+            {                
+                _vehicle.SpawnCar(player, model);  
+            }
+        [Command("mycars")]
+        public void MyCarsCommand(Player player)
+        {
+            var cars = _vehicle.GetPlayerCars(player);
+            if (cars.Count == 0)
+            {
+                player.SendChatMessage("У тебя нет автомобилей.");
+                return;         
+            }
+            foreach (var car in cars)
+            {
+                player.SendChatMessage($"{car.Key} - ${car.Value}");    
+            }
+        }
     }
 }
