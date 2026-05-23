@@ -122,8 +122,14 @@ namespace MyRageMPServer
             public void OnPlayerConnected(Player player)
             {
                 
+                if (_auth.IsBanned(player.Name))
+                    {
+                        player.Kick("Вы забанены на этом сервере.");
+                        return;
+                    }
                 player.SendChatMessage("Введи /register логин пароль или /login логин пароль для авторизации.");
                 player.TriggerEvent("playerJoinedServer", player.Name);
+                
                 
             }
 
@@ -162,6 +168,33 @@ namespace MyRageMPServer
                 {
                     _auth.SetAdminLevel(target, level);
                     player.SendChatMessage($"У игрока {target.Name} теперь уровень администратора: {level}");
+                }
+                else
+                {
+                    player.SendChatMessage("Ошибка: У тебя нет прав для выполнения этой команды.");
+                }
+            }
+        [Command("ban")]
+            public void BanCommand(Player player, Player target, string reason)
+            {
+                if (_auth.IsAdmin(player, 2))
+                {
+                    _auth.BanPlayer(player, target, reason);
+                    target.Kick(reason);
+                    player.SendChatMessage($"Игрок {target.Name} был забанен. Причина: {reason}");
+                }
+                else
+                {
+                    player.SendChatMessage("Ошибка: У тебя нет прав для выполнения этой команды.");
+                }
+            }
+        [Command("unban")]
+            public void UnbanCommand(Player player, string targetName)
+            {
+                if (_auth.IsAdmin(player, 2))
+                {
+                    _auth.UnbanPlayer(targetName);
+                    player.SendChatMessage($"Игрок {targetName} был разбанен.");
                 }
                 else
                 {

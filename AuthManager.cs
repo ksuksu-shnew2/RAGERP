@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GTANetworkAPI;
 using System.Security.Cryptography;
 using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Asn1.X509;
 
 namespace MyRageMPServer
 {
@@ -224,6 +225,50 @@ namespace MyRageMPServer
                 playerData.AdminLevel = level;
                 UpdatePlayer(playerData);
                 player.SendChatMessage($"Твой админ уровень был установлен на {level}.");
+            }
+        }
+        public bool IsBanned(string login)
+        {
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                connection.Open();
+                var cmd = new MySqlCommand("SELECT id FROM bans WHERE login = @login and (expires_at > NOW() or expires_at is null)", connection);
+                cmd.Parameters.AddWithValue("@login", login);
+                var result = cmd.ExecuteScalar();
+                return result != null;
+            }
+        }
+
+        public void BanPlayer(Player admin, Player target, string reason)
+        {
+            if (IsAdmin(admin))
+            {
+                var targetData = GetPlayerData(target);
+                if (targetData != null)
+                {
+                    using (var connection = new MySqlConnection(_connectionString))
+                    {
+                        connection.Open();
+                        var cmd = new MySqlCommand("INSERT INTO bans (login, reason, banned_by, expires_at) VALUES (@login, @reason, @banned_by, NULL)", connection);
+                        cmd.Parameters.AddWithValue("@login", targetData.Login);
+                        cmd.Parameters.AddWithValue("@reason", reason);
+                        cmd.Parameters.AddWithValue("@banned_by", admin.Name);
+                        cmd.ExecuteNonQuery();
+                    }
+                    target.SendChatMessage($"Ты был забанен администратором {admin.Name} по причине: {reason}");
+                    target.Kick("You have been banned.");
+                }
+            }
+        }
+
+        public void UnbanPlayer(string login)
+        {
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                connection.Open();
+                var cmd = new MySqlCommand("DELETE FROM bans WHERE login = @login", connection);
+                cmd.Parameters.AddWithValue("@login", login);
+                cmd.ExecuteNonQuery();
             }
         }
 
