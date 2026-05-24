@@ -12,6 +12,6 @@ namespace MyRageMPServer
         public int HealthRestore;
         public string Description;
 
-        
+        public int Price;
     }
 }

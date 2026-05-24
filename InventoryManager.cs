@@ -18,11 +18,11 @@ namespace MyRageMPServer
                 _auth = auth;
             }
 
-        private Dictionary<string, ItemDefinition> _items = new Dictionary<string, ItemDefinition>
+        public Dictionary<string, ItemDefinition> _items = new Dictionary<string, ItemDefinition>
             {
-                { "bread", new ItemDefinition { Name = "Хлеб", HealthRestore = 20, Description = "Восстанавливает 20 здоровья" }},
-                { "bandage", new ItemDefinition { Name = "Бинт", HealthRestore = 30, Description = "Восстанавливает 30 здоровья" }},
-                { "water", new ItemDefinition { Name = "Вода", HealthRestore = 10, Description = "Восстанавливает 10 здоровья" }}
+                { "bread", new ItemDefinition { Name = "Хлеб", HealthRestore = 20, Description = "Восстанавливает 20 здоровья", Price = 50 }},
+                { "bandage", new ItemDefinition { Name = "Бинт", HealthRestore = 30, Description = "Восстанавливает 30 здоровья", Price = 100 }},
+                { "water", new ItemDefinition { Name = "Вода", HealthRestore = 10, Description = "Восстанавливает 10 здоровья", Price = 30 }}            
             };
         public Dictionary<string, int> GetInventory(Player player)
         {

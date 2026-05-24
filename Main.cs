@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using GTANetworkAPI;
 
 namespace MyRageMPServer
@@ -282,5 +283,46 @@ namespace MyRageMPServer
                 player.SendChatMessage($"{car.Key} - ${car.Value}");    
             }
         }
+        [Command("shop")]
+        public void shopItem(Player player)
+        {
+            if (_auth.IsAuthorized(player))
+            {player.SendChatMessage("=== Магазин ===");
+             foreach(var item in _inventory._items)
+             {
+                player.SendChatMessage($"{item.Value.Name} - ${item.Value.Price}");    
+             }}
+            else
+            player.SendChatMessage("Ошибка: У тебя нет прав для выполнения этой команды.");
+
+        }
+        [Command("buy")]
+            public void BuyCommand(Player player, string itemKey, int quantity)
+            {
+                if (!_auth.IsAuthorized(player))
+                {
+                    player.SendChatMessage("Ошибка: Ты не авторизован.");
+                    return;
+                }
+
+                if (!_inventory._items.ContainsKey(itemKey))
+                {
+                    player.SendChatMessage("Ошибка: Такого предмета нет в магазине.");
+                    return;
+                }
+
+                var item = _inventory._items[itemKey];
+                int amount = item.Price * quantity;
+
+                if (_auth.TakeMoney(player, amount))
+                {
+                    _inventory.AddItem(player, itemKey, quantity);
+                    player.SendChatMessage($"Вы купили {item.Name} x{quantity} за ${amount}.");
+                }
+                else
+                {
+                    player.SendChatMessage("Ошибка: Недостаточно денег.");
+                }
+            }
     }
 }
