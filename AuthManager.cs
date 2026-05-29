@@ -110,7 +110,8 @@ namespace MyRageMPServer
                                 Level = reader.GetInt32("level"),
                                 Experience = reader.GetInt32("experience"),
                                 AdminLevel = reader.GetInt32("admin_level"),
-                                IsMuted = reader.GetBoolean("is_muted")
+                                IsMuted = reader.GetBoolean("is_muted"),
+                                FactionId = reader.GetInt32("faction_id")
                             };
                         }
                     }
@@ -138,7 +139,7 @@ namespace MyRageMPServer
             using (var connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                var cmd = new MySqlCommand("UPDATE players SET money=@money, health=@health, pos_x=@pos_x, pos_y=@pos_y, pos_z=@pos_z, last_login=@last_login, level=@level, experience=@experience, admin_level=@admin_level, is_muted=@is_muted WHERE id=@id", connection);
+                var cmd = new MySqlCommand("UPDATE players SET money=@money, health=@health, pos_x=@pos_x, pos_y=@pos_y, pos_z=@pos_z, last_login=@last_login, level=@level, experience=@experience, admin_level=@admin_level, is_muted=@is_muted,faction_id=@faction_id WHERE id=@id", connection);
             
                 cmd.Parameters.AddWithValue("@id", playerData.Id);
                 cmd.Parameters.AddWithValue("@money", playerData.Money);
@@ -151,6 +152,7 @@ namespace MyRageMPServer
                 cmd.Parameters.AddWithValue("@experience", playerData.Experience);
                 cmd.Parameters.AddWithValue("@admin_level", playerData.AdminLevel);
                 cmd.Parameters.AddWithValue("@is_muted", playerData.IsMuted);
+                cmd.Parameters.AddWithValue("@faction_id", playerData.FactionId);
                 cmd.ExecuteNonQuery();
                 return playerData;
             }

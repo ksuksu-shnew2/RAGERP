@@ -16,5 +16,6 @@ namespace MyRageMPServer
         public int Experience = 0;
         public int AdminLevel;
         public bool IsMuted;
+        public int FactionId = 0;
     }
 }

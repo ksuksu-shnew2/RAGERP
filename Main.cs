@@ -1,5 +1,5 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
+
 using GTANetworkAPI;
 
 namespace MyRageMPServer
@@ -9,12 +9,14 @@ namespace MyRageMPServer
         public AuthManager _auth = new AuthManager();
         public InventoryManager _inventory;
 
+        public FactionManager _faction;
         public VehicleManager _vehicle;
 
         public Main()
         {
             _inventory = new InventoryManager(_auth);
             _vehicle = new VehicleManager(_auth);
+            _faction = new FactionManager(_auth);
         }
 
         [ServerEvent(Event.ResourceStart)]
@@ -324,5 +326,50 @@ namespace MyRageMPServer
                     player.SendChatMessage("Ошибка: Недостаточно денег.");
                 }
             }
+        [Command("setfaction")]
+            public void SetFactionCommand(Player player, Player target, int id_factionId)
+                {
+                    _faction.SetFaction(player,target,id_factionId);
+                }
+        [Command("myfaction")]
+            public void MyfactionCommand(Player player)
+                {
+                    var playerData = _auth.GetPlayerData(player);
+                    _faction.GetFactionName(playerData.FactionId);
+                    player.SendChatMessage(_faction.GetFactionName(playerData.FactionId));
+                }
+        [Command("arrest")]
+            public void ArrestCommand(Player player,Player target)
+                {
+                if (_auth.IsAdmin(player))
+                    if(_faction.IsInFaction(player, 1))
+                        {
+                            string reason = "Тест блокировки";
+                            target.Kick(reason);
+                            player.SendChatMessage($"Игрок {target.Name} был кикнут. Причина: {reason}");
+                        }
+                else
+                {
+                    player.SendChatMessage("Ошибка: У тебя нет прав для выполнения этой команды.");
+                }
+            }
+
+            [Command("heal")]
+            public void HealCommand(Player player,Player target)
+                {
+                if (_auth.IsAdmin(player))
+                    if(_faction.IsInFaction(player, 3))
+                        {
+                            //var playerData = _auth.GetPlayerData(target);
+                            target.Health = 100;
+                            player.SendChatMessage($"Игрок {target.Name} восстановил здоровье до 100%");
+                        }
+                else
+                {
+                    player.SendChatMessage("Ошибка: У тебя нет прав для выполнения этой команды.");
+                }
+            }
+
+
     }
 }
