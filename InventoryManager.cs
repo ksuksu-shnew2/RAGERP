@@ -124,18 +124,25 @@ namespace MyRageMPServer
             var playerData = _auth.GetPlayerData(player);
             if (playerData == null) return;
 
-            if (_items.ContainsKey(item))
+            if (!_items.ContainsKey(item))
             {
+                player.SendChatMessage("Ошибка: Предмет не найден.");
+                return;
+            }
+
+            var inventory = await GetInventory(player);
+            if (!inventory.ContainsKey(item) || inventory[item] <= 0)
+            {
+                player.SendChatMessage("Ошибка: У тебя нет этого предмета.");
+                return;
+            }
+            
                 var itemDef = _items[item];
                 
                 player.Health = Math.Min(100, player.Health + itemDef.HealthRestore);
                 await RemoveItem(player, item, 1);
                 player.SendChatMessage($"Ты использовал {itemDef.Name}. {itemDef.Description}");
-            }
-            else
-            {
-                player.SendChatMessage("Ошибка: Предмет не найден.");
-            }
+            
         }
     }
 }
