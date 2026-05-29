@@ -244,7 +244,7 @@ namespace MyRageMPServer
             }
         }
 
-        public async void BanPlayerAsync(Player admin, Player target, string reason)
+        public async Task BanPlayerAsync(Player admin, Player target, string reason)
         {
             if (IsAdmin(admin))
             {
@@ -266,7 +266,7 @@ namespace MyRageMPServer
             }
         }
 
-        public async void UnbanPlayerAsync(string login)
+        public async Task UnbanPlayerAsync(string login)
         {
             using (var connection = new MySqlConnection(Config.GetConnectionString()))
             {

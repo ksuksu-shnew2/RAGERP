@@ -189,7 +189,7 @@ namespace MyRageMPServer
             {
                 if (_auth.IsAdmin(player, 2))
                 {
-                    _auth.BanPlayerAsync(player, target, reason);
+                    await _auth.BanPlayerAsync(player, target, reason);
                     target.Kick(reason);
                     player.SendChatMessage($"Игрок {target.Name} был забанен. Причина: {reason}");
                 }
@@ -203,7 +203,7 @@ namespace MyRageMPServer
             {
                 if (_auth.IsAdmin(player, 2))
                 {
-                    _auth.UnbanPlayerAsync(targetName);
+                    await _auth.UnbanPlayerAsync(targetName);
                     player.SendChatMessage($"Игрок {targetName} был разбанен.");
                 }
                 else
@@ -332,41 +332,32 @@ namespace MyRageMPServer
             public void MyfactionCommand(Player player)
                 {
                     var playerData = _auth.GetPlayerData(player);
-                    _faction.GetFactionName(playerData.FactionId);
                     player.SendChatMessage(_faction.GetFactionName(playerData.FactionId));
                 }
         [Command("arrest")]
             public void ArrestCommand(Player player,Player target)
                 {
-                if (_auth.IsAdmin(player))
-                    if(_faction.IsInFaction(player, 1))
-                        {
-                            string reason = "Тест блокировки";
-                            target.Kick(reason);
-                            player.SendChatMessage($"Игрок {target.Name} был кикнут. Причина: {reason}");
-                        }
-                else
-                {
-                    player.SendChatMessage("Ошибка: У тебя нет прав для выполнения этой команды.");
+                    if (!_faction.IsInFaction(player, 1))
+                    {
+                        player.SendChatMessage("Ошибка: Эта команда только для полиции.");
+                        return;
+                    }
+                    string reason = "Арест";
+                    target.Kick(reason);
+                    player.SendChatMessage($"Игрок {target.Name} был арестован.");
                 }
-            }
 
             [Command("heal")]
             public void HealCommand(Player player,Player target)
                 {
-                if (_auth.IsAdmin(player))
-                    if(_faction.IsInFaction(player, 3))
-                        {
-                            //var playerData = _auth.GetPlayerData(target);
-                            target.Health = 100;
-                            player.SendChatMessage($"Игрок {target.Name} восстановил здоровье до 100%");
-                        }
-                else
-                {
-                    player.SendChatMessage("Ошибка: У тебя нет прав для выполнения этой команды.");
+                    if (!_faction.IsInFaction(player, 3))
+                    {
+                        player.SendChatMessage("Ошибка: Эта команда только для медиков.");
+                        return;
+                    }
+                    target.Health = 100;
+                    player.SendChatMessage($"Игрок {target.Name} восстановлен до 100% здоровья.");
+                    target.SendChatMessage($"Медик {player.Name} восстановил твоё здоровье.");
                 }
-            }
-
-
     }
 }
