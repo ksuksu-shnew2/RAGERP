@@ -283,7 +283,7 @@ namespace MyRageMPServer
             }
         }
         [Command("shop")]
-        public void shopItem(Player player)
+        public void ShopItem(Player player)
         {
             if (_auth.IsAuthorized(player))
             {player.SendChatMessage("=== Магазин ===");

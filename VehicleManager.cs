@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using GTANetworkAPI;
-using System.Security.Cryptography;
 using MySql.Data.MySqlClient;
 using System.Threading.Tasks;
 
