@@ -236,9 +236,9 @@ namespace MyRageMPServer
                 }
             }
         [Command("inventory")]
-            public void InventoryCommand(Player player)
+            public async Task InventoryCommand(Player player)
             {
-                var inventory = _inventory.GetInventory(player);
+                var inventory = await _inventory.GetInventory(player);
                 if (inventory.Count == 0)
                     {
                         player.SendChatMessage("Твой инвентарь пуст.");
@@ -248,15 +248,15 @@ namespace MyRageMPServer
                         player.SendChatMessage($"{item.Key}: {item.Value} шт.");
             }
         [Command("giveitem")]
-            public void AddItemCommand(Player player, string item, int quantity)
+            public async Task AddItemCommand(Player player, string item, int quantity)
             {
-                _inventory.AddItem(player, item, quantity);
+                await _inventory.AddItem(player, item, quantity);
                 player.SendChatMessage($"Ты получил {quantity}x {item}.");
             }
         [Command("useitem")]
-            public void UseItemCommand(Player player, string item)
+            public async Task UseItemCommand(Player player, string item)
             {
-                _inventory.UseItem(player, item);
+                await _inventory.UseItem(player, item);
             }
         [Command("buycar")]
             public async Task BuyCarCommand(Player player, string model)
@@ -315,7 +315,7 @@ namespace MyRageMPServer
 
                 if (await _auth.TakeMoney(player, amount))
                 {
-                    _inventory.AddItem(player, itemKey, quantity);
+                    await _inventory.AddItem(player, itemKey, quantity);
                     player.SendChatMessage($"Вы купили {item.Name} x{quantity} за ${amount}.");
                 }
                 else
