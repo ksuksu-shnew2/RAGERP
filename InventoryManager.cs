@@ -11,7 +11,7 @@ namespace MyRageMPServer
     {
         private AuthManager _auth;
     
-        private string _connectionString = "Server=localhost;Database=ragemp;User=ragemp;Password=password123;";
+        
 
          public InventoryManager(AuthManager auth)
             {
@@ -31,7 +31,7 @@ namespace MyRageMPServer
             if (playerData == null) return inventory;
             // Получаем инвентарь игрока из базы данных
                 
-                using (var connection = new MySqlConnection(_connectionString))
+                using (var connection = new MySqlConnection(Config.GetConnectionString()))
                 {
                     connection.Open(); 
                     
@@ -57,7 +57,7 @@ namespace MyRageMPServer
             var playerData = _auth.GetPlayerData(player);
             if (playerData == null) return;
 
-            using (var connection = new MySqlConnection(_connectionString))
+            using (var connection = new MySqlConnection(Config.GetConnectionString()))
             {
                 connection.Open();
 
@@ -89,7 +89,7 @@ namespace MyRageMPServer
             var playerData = _auth.GetPlayerData(player);
             if (playerData == null) return;
 
-            using (var connection = new MySqlConnection(_connectionString))
+            using (var connection = new MySqlConnection(Config.GetConnectionString()))
             {
                 connection.Open();
 

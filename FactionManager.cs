@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using GTANetworkAPI;
 
 namespace MyRageMPServer
@@ -19,7 +20,7 @@ namespace MyRageMPServer
                 { 2, "Мафия" },
                 { 3, "Медики" }
             };
-        public void SetFaction(Player admin, Player target, int factionId)
+        public async Task SetFaction(Player admin, Player target, int factionId)
         {
              if (_auth.IsAdmin(admin,2))
             {
@@ -27,7 +28,7 @@ namespace MyRageMPServer
                 if (targetData != null)
                 {
                     targetData.FactionId = factionId;
-                    _auth.UpdatePlayer(targetData);
+                    await _auth.UpdatePlayerAsync(targetData);
                 }
 
             }

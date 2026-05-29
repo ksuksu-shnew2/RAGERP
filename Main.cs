@@ -1,5 +1,5 @@
 using System;
-
+using System.Threading.Tasks;
 using GTANetworkAPI;
 
 namespace MyRageMPServer
@@ -25,9 +25,9 @@ namespace MyRageMPServer
             NAPI.Util.ConsoleOutput("=== Сервер запущен! ===");
         }
         [Command("register")]
-            public void RegisterCommand(Player player, string login, string password)
+            public async Task RegisterCommand(Player player, string login, string password)
             {
-                if (_auth.Register(player, login, password))
+                if (await _auth.Register(player, login, password))
                 {
                     player.SendChatMessage("Регистрация успешна! Теперь ты можешь войти с помощью /login.");
                     
@@ -39,9 +39,9 @@ namespace MyRageMPServer
                 }
             }
         [Command("login")]
-            public void LoginCommand(Player player, string login, string password)
+            public async Task LoginCommand(Player player, string login, string password)
             {
-                var playerData = _auth.Login(player, login, password);
+                var playerData = await _auth.Login(player, login, password);
                 if (playerData != null)
                 {
                     player.SendChatMessage("Вход успешен!");
@@ -94,11 +94,11 @@ namespace MyRageMPServer
                 }
             }
         [Command("takemoney")]
-            public void TakeMoneyCommand(Player player, int amount)
+            public async Task TakeMoneyCommand(Player player, int amount)
             {
                 if (_auth.IsAuthorized(player))
                 {
-                    if (_auth.TakeMoney(player, amount))
+                    if (await _auth.TakeMoney(player, amount))
                     {
                         player.SendChatMessage($"У тебя было снято ${amount}.");
                     }
@@ -111,11 +111,11 @@ namespace MyRageMPServer
                 }
             }
         [Command("pay")]
-        public void PayCommand(Player player, Player target, int amount)
+        public async Task PayCommand(Player player, Player target, int amount)
             {
                 if (_auth.IsAuthorized(player))
                 {
-                    if (_auth.TakeMoney(player, amount))
+                    if (await _auth.TakeMoney(player, amount))
                     {
                         _auth.GiveMoney(target, amount);
                         player.SendChatMessage($"Ты заплатил ${amount} игроку {target.Name}.");
@@ -132,19 +132,16 @@ namespace MyRageMPServer
                 }
             }
         [ServerEvent(Event.PlayerConnected)]
-            public void OnPlayerConnected(Player player)
+        public async void OnPlayerConnected(Player player)
+        {
+            if (await _auth.IsBannedAsync(player.Name))
             {
-                
-                if (_auth.IsBanned(player.Name))
-                    {
-                        player.Kick("Вы забанены на этом сервере.");
-                        return;
-                    }
-                player.SendChatMessage("Введи /register логин пароль или /login логин пароль для авторизации.");
-                player.TriggerEvent("playerJoinedServer", player.Name);
-                
-                
+                player.Kick("Вы забанены на этом сервере.");
+                return;
             }
+            player.SendChatMessage("Введи /register логин пароль или /login логин пароль для авторизации.");
+            player.TriggerEvent("playerJoinedServer", player.Name);
+        }
 
         [ServerEvent(Event.PlayerDisconnected)]
             public void OnPlayerDisconnected(Player player, DisconnectionType type, string reason)
@@ -188,11 +185,11 @@ namespace MyRageMPServer
                 }
             }
         [Command("ban")]
-            public void BanCommand(Player player, Player target, string reason)
+            public async Task BanCommand(Player player, Player target, string reason)
             {
                 if (_auth.IsAdmin(player, 2))
                 {
-                    _auth.BanPlayer(player, target, reason);
+                    _auth.BanPlayerAsync(player, target, reason);
                     target.Kick(reason);
                     player.SendChatMessage($"Игрок {target.Name} был забанен. Причина: {reason}");
                 }
@@ -202,11 +199,11 @@ namespace MyRageMPServer
                 }
             }
         [Command("unban")]
-            public void UnbanCommand(Player player, string targetName)
+            public async Task UnbanCommand(Player player, string targetName)
             {
                 if (_auth.IsAdmin(player, 2))
                 {
-                    _auth.UnbanPlayer(targetName);
+                    _auth.UnbanPlayerAsync(targetName);
                     player.SendChatMessage($"Игрок {targetName} был разбанен.");
                 }
                 else
@@ -262,9 +259,9 @@ namespace MyRageMPServer
                 _inventory.UseItem(player, item);
             }
         [Command("buycar")]
-            public void BuyCarCommand(Player player, string model)
+            public async Task BuyCarCommand(Player player, string model)
             {
-                _vehicle.BuyCar(player, model);
+               await _vehicle.BuyCar(player, model);
             }
         [Command("spawncar")]
             public void SpawnCarCommand(Player player, string model)
@@ -272,9 +269,9 @@ namespace MyRageMPServer
                 _vehicle.SpawnCar(player, model);  
             }
         [Command("mycars")]
-        public void MyCarsCommand(Player player)
+        public async Task MyCarsCommand(Player player)
         {
-            var cars = _vehicle.GetPlayerCars(player);
+            var cars = await _vehicle.GetPlayerCars(player);
             if (cars.Count == 0)
             {
                 player.SendChatMessage("У тебя нет автомобилей.");
@@ -299,7 +296,7 @@ namespace MyRageMPServer
 
         }
         [Command("buy")]
-            public void BuyCommand(Player player, string itemKey, int quantity)
+            public async Task BuyCommand(Player player, string itemKey, int quantity)
             {
                 if (!_auth.IsAuthorized(player))
                 {
@@ -316,7 +313,7 @@ namespace MyRageMPServer
                 var item = _inventory._items[itemKey];
                 int amount = item.Price * quantity;
 
-                if (_auth.TakeMoney(player, amount))
+                if (await _auth.TakeMoney(player, amount))
                 {
                     _inventory.AddItem(player, itemKey, quantity);
                     player.SendChatMessage($"Вы купили {item.Name} x{quantity} за ${amount}.");
@@ -327,9 +324,9 @@ namespace MyRageMPServer
                 }
             }
         [Command("setfaction")]
-            public void SetFactionCommand(Player player, Player target, int id_factionId)
+            public async Task SetFactionCommand(Player player, Player target, int id_factionId)
                 {
-                    _faction.SetFaction(player,target,id_factionId);
+                    await _faction.SetFaction(player,target,id_factionId);
                 }
         [Command("myfaction")]
             public void MyfactionCommand(Player player)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GTANetworkAPI;
 using System.Security.Cryptography;
 using MySql.Data.MySqlClient;
+using System.Threading.Tasks;
 
 
 namespace MyRageMPServer
@@ -10,31 +11,31 @@ namespace MyRageMPServer
     public class AuthManager
     {
         private Dictionary<Player, PlayerData> _authorizedPlayers = new Dictionary<Player, PlayerData>();
-        private string _connectionString = "Server=localhost;Database=ragemp;User=ragemp;Password=password123;";
+        
 
-        public bool Register(Player player, string login, string password)
+        public async Task<bool> Register(Player player, string login, string password)
         {
-            if (FindPlayer(login) != null)
-                return false; // Login already exists
+            if (await FindPlayerAsync(login) != null)
+                return false; 
 
             var playerData = new PlayerData
             {
-                Id = _authorizedPlayers.Count + 1,
+                
                 Login = login,
                 PasswordHash = HashPassword(password),
                 CreatedAt = DateTime.UtcNow
             };
 
-            CreatePlayer(playerData); // сохраняем в БД
+            await CreatePlayerAsync(playerData); // сохраняем в БД
             _authorizedPlayers[player] = playerData;
             return true;
 
             
         }
 
-        public PlayerData Login(Player player,string login, string password)
+        public async Task<PlayerData> Login(Player player,string login, string password)
         {
-            if(FindPlayer(login) is PlayerData playerData)
+            if(await FindPlayerAsync(login) is PlayerData playerData)
             {
                 if (VerifyPassword(password, playerData.PasswordHash))
                 {
@@ -48,11 +49,11 @@ namespace MyRageMPServer
             
         }
 
-        public void Logout(Player player)
+        public async void Logout(Player player)
         {
            if (_authorizedPlayers.TryGetValue(player, out var playerData))
                 {
-                    UpdatePlayer(playerData); // сохраняем в БД
+                    await UpdatePlayerAsync(playerData); // сохраняем в БД
                     _authorizedPlayers.Remove(player);
                 }
         } 
@@ -84,18 +85,18 @@ namespace MyRageMPServer
             return HashPassword(password) == hash;
         }
 
-        private PlayerData FindPlayer(string login)
+        private async Task<PlayerData> FindPlayerAsync(string login)
             {
-                using (var connection = new MySqlConnection(_connectionString))
+                using (var connection = new MySqlConnection(Config.GetConnectionString()))
                 {
-                    connection.Open(); // открываем соединение
+                    await connection.OpenAsync();
                     
                     var cmd = new MySqlCommand("SELECT * FROM players WHERE login = @login", connection);
                     cmd.Parameters.AddWithValue("@login", login); // защита от SQL инъекций
                     
-                    using (var reader = cmd.ExecuteReader())
+                    using (var reader = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        if (reader.Read()) // если нашли запись
+                        if (await reader.ReadAsync()) 
                         {
                             return new PlayerData
                             {
@@ -116,29 +117,29 @@ namespace MyRageMPServer
                         }
                     }
                 }
-                return null; // не нашли
+                return null; 
             }
-        private PlayerData CreatePlayer(PlayerData playerData)
+        private async Task<PlayerData> CreatePlayerAsync(PlayerData playerData)
         {
-            using (var connection = new MySqlConnection(_connectionString))
+            using (var connection = new MySqlConnection(Config.GetConnectionString()))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 var cmd = new MySqlCommand("INSERT INTO players (login, password_hash, created_at) VALUES (@login, @password_hash, @created_at); SELECT LAST_INSERT_ID();", connection);
                 cmd.Parameters.AddWithValue("@login", playerData.Login);
                 cmd.Parameters.AddWithValue("@password_hash", playerData.PasswordHash);
                 cmd.Parameters.AddWithValue("@created_at", playerData.CreatedAt);
 
-                var id = Convert.ToInt32(cmd.ExecuteScalar());
+                var id = Convert.ToInt32(await cmd.ExecuteScalarAsync());
                 playerData.Id = id;
                 return playerData;
             }
         }
 
-        public PlayerData UpdatePlayer(PlayerData playerData)
+        public async Task<PlayerData> UpdatePlayerAsync(PlayerData playerData)
         {
-            using (var connection = new MySqlConnection(_connectionString))
+            using (var connection = new MySqlConnection(Config.GetConnectionString()))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 var cmd = new MySqlCommand("UPDATE players SET money=@money, health=@health, pos_x=@pos_x, pos_y=@pos_y, pos_z=@pos_z, last_login=@last_login, level=@level, experience=@experience, admin_level=@admin_level, is_muted=@is_muted,faction_id=@faction_id WHERE id=@id", connection);
             
                 cmd.Parameters.AddWithValue("@id", playerData.Id);
@@ -153,12 +154,12 @@ namespace MyRageMPServer
                 cmd.Parameters.AddWithValue("@admin_level", playerData.AdminLevel);
                 cmd.Parameters.AddWithValue("@is_muted", playerData.IsMuted);
                 cmd.Parameters.AddWithValue("@faction_id", playerData.FactionId);
-                cmd.ExecuteNonQuery();
+                await cmd.ExecuteNonQueryAsync();
                 return playerData;
             }
         }
 
-        public void AddExperience(Player player, int amount)
+        public async void AddExperience(Player player, int amount)
         {
             if (IsAuthorized(player))
             {
@@ -170,7 +171,7 @@ namespace MyRageMPServer
                     playerData.Experience = 0;
                     player.SendChatMessage($"Поздравляем! Ты достиг уровня {playerData.Level}!");
                 }
-                UpdatePlayer(playerData);
+                await UpdatePlayerAsync(playerData);
             }
         }
 
@@ -179,29 +180,29 @@ namespace MyRageMPServer
             return 100 * level; // простая формула для примера
         }
 
-        public void LevelUp(Player player)
+        public async void LevelUp(Player player)
         {
             if (IsAuthorized(player))
             {
                 var playerData = GetPlayerData(player);
                 playerData.Level++;
                 playerData.Experience = 0;
-                UpdatePlayer(playerData);
+                await UpdatePlayerAsync(playerData);
                 player.SendChatMessage($"Поздравляем! Ты достиг уровня {playerData.Level}!");
             }
         }
 
-        public void GiveMoney(Player player, int amount)
+        public async void GiveMoney(Player player, int amount)
         {
             if (IsAuthorized(player))
             {
                 var playerData = GetPlayerData(player);
                 playerData.Money += amount;
-                UpdatePlayer(playerData);
+                await UpdatePlayerAsync(playerData);
             }
         }
 
-        public bool TakeMoney(Player player, int amount)
+        public async Task<bool> TakeMoney(Player player, int amount)
         {
             if (IsAuthorized(player))
             {
@@ -209,7 +210,7 @@ namespace MyRageMPServer
                 if (playerData.Money >= amount)
                 {
                     playerData.Money -= amount;
-                    UpdatePlayer(playerData);
+                    await UpdatePlayerAsync(playerData);
                     return true;
                 }
             }
@@ -221,43 +222,43 @@ namespace MyRageMPServer
                 var playerData = GetPlayerData(player);
                 return playerData != null && playerData.AdminLevel >= minLevel;
             }
-        public void SetAdminLevel(Player player, int level)
+        public async void SetAdminLevel(Player player, int level)
         {
             if (IsAuthorized(player))
             {
                 var playerData = GetPlayerData(player);
                 playerData.AdminLevel = level;
-                UpdatePlayer(playerData);
+                await UpdatePlayerAsync(playerData);
                 player.SendChatMessage($"Твой админ уровень был установлен на {level}.");
             }
         }
-        public bool IsBanned(string login)
+        public async Task<bool> IsBannedAsync(string login)
         {
-            using (var connection = new MySqlConnection(_connectionString))
+            using (var connection = new MySqlConnection(Config.GetConnectionString()))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 var cmd = new MySqlCommand("SELECT id FROM bans WHERE login = @login and (expires_at > NOW() or expires_at is null)", connection);
                 cmd.Parameters.AddWithValue("@login", login);
-                var result = cmd.ExecuteScalar();
+                var result = await cmd.ExecuteScalarAsync();
                 return result != null;
             }
         }
 
-        public void BanPlayer(Player admin, Player target, string reason)
+        public async void BanPlayerAsync(Player admin, Player target, string reason)
         {
             if (IsAdmin(admin))
             {
                 var targetData = GetPlayerData(target);
                 if (targetData != null)
                 {
-                    using (var connection = new MySqlConnection(_connectionString))
+                    using (var connection = new MySqlConnection(Config.GetConnectionString()))
                     {
-                        connection.Open();
+                        await connection.OpenAsync();
                         var cmd = new MySqlCommand("INSERT INTO bans (login, reason, banned_by, expires_at) VALUES (@login, @reason, @banned_by, NULL)", connection);
                         cmd.Parameters.AddWithValue("@login", targetData.Login);
                         cmd.Parameters.AddWithValue("@reason", reason);
                         cmd.Parameters.AddWithValue("@banned_by", admin.Name);
-                        cmd.ExecuteNonQuery();
+                        await cmd.ExecuteNonQueryAsync();
                     }
                     target.SendChatMessage($"Ты был забанен администратором {admin.Name} по причине: {reason}");
                     target.Kick("You have been banned.");
@@ -265,18 +266,18 @@ namespace MyRageMPServer
             }
         }
 
-        public void UnbanPlayer(string login)
+        public async void UnbanPlayerAsync(string login)
         {
-            using (var connection = new MySqlConnection(_connectionString))
+            using (var connection = new MySqlConnection(Config.GetConnectionString()))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 var cmd = new MySqlCommand("DELETE FROM bans WHERE login = @login", connection);
                 cmd.Parameters.AddWithValue("@login", login);
-                cmd.ExecuteNonQuery();
+                await cmd.ExecuteNonQueryAsync();
             }
         }
 
-        public void MutePlayer(Player admin, Player target)
+        public async void MutePlayer(Player admin, Player target)
         {
             if (IsAdmin(admin))
             {
@@ -284,12 +285,12 @@ namespace MyRageMPServer
                 if (targetData != null)
                 {
                     targetData.IsMuted = true;
-                    UpdatePlayer(targetData);
+                    await UpdatePlayerAsync(targetData);
                     target.SendChatMessage($"Ты был замучен администратором {admin.Name} и не можешь отправлять сообщения в чат.");
                 }
             }
         }
-        public void UnmutePlayer(Player admin, Player target)
+        public async void UnmutePlayer(Player admin, Player target)
         {
             if (IsAdmin(admin))
             {
@@ -297,7 +298,7 @@ namespace MyRageMPServer
                 if (targetData != null)
                 {
                     targetData.IsMuted = false;
-                    UpdatePlayer(targetData);
+                    await UpdatePlayerAsync(targetData);
                     target.SendChatMessage($"Ты был размучен администратором {admin.Name} и теперь можешь отправлять сообщения в чат.");
                 }
             }

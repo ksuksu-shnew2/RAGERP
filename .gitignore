@@ -9,3 +9,4 @@ win/
 win_server/
 Bootstrapper.dll
 GTANetworkAPI.dll
+appsettings.json
