@@ -81,13 +81,13 @@ namespace MyRageMPServer
                 }
             }
         [Command("givemoney")]
-            public void GiveMoneyCommand(Player player, int amount)
+            public async Task GiveMoneyCommand(Player player, int amount)
             {
                 if (_auth.IsAuthorized(player))
                 {
-                    _auth.GiveMoney(player, amount);
+                    await _auth.GiveMoney(player, amount);
                     player.SendChatMessage($"Тебе было добавлено ${amount}.");
-                }
+                } 
                 else
                 {
                     player.SendChatMessage("Ошибка: Ты не авторизован. Введи /login для входа.");
@@ -117,7 +117,7 @@ namespace MyRageMPServer
                 {
                     if (await _auth.TakeMoney(player, amount))
                     {
-                        _auth.GiveMoney(target, amount);
+                        await _auth.GiveMoney(target, amount);
                         player.SendChatMessage($"Ты заплатил ${amount} игроку {target.Name}.");
                         target.SendChatMessage($"Ты получил ${amount} от игрока {player.Name}.");
                     }
@@ -283,17 +283,16 @@ namespace MyRageMPServer
             }
         }
         [Command("shop")]
-        public void ShopItem(Player player)
+        public void ShopCommand(Player player)
         {
-            if (_auth.IsAuthorized(player))
-            {player.SendChatMessage("=== Магазин ===");
-             foreach(var item in _inventory._items)
-             {
-                player.SendChatMessage($"{item.Value.Name} - ${item.Value.Price}");    
-             }}
-            else
-            player.SendChatMessage("Ошибка: У тебя нет прав для выполнения этой команды.");
-
+            if (!_auth.IsAuthorized(player))
+            {
+                player.SendChatMessage("Ошибка: Ты не авторизован.");
+                return;
+            }
+            player.SendChatMessage("=== Магазин ===");
+            foreach (var item in _inventory.GetItems())
+                player.SendChatMessage($"{item.Value.Name} - ${item.Value.Price}");
         }
         [Command("buy")]
             public async Task BuyCommand(Player player, string itemKey, int quantity)
@@ -304,13 +303,13 @@ namespace MyRageMPServer
                     return;
                 }
 
-                if (!_inventory._items.ContainsKey(itemKey))
+                if (!_inventory.GetItems().ContainsKey(itemKey))
                 {
                     player.SendChatMessage("Ошибка: Такого предмета нет в магазине.");
                     return;
                 }
 
-                var item = _inventory._items[itemKey];
+                var item = _inventory.GetItems()[itemKey];
                 int amount = item.Price * quantity;
 
                 if (await _auth.TakeMoney(player, amount))

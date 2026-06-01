@@ -192,7 +192,7 @@ namespace MyRageMPServer
             }
         }
 
-        public async void GiveMoney(Player player, int amount)
+        public async Task GiveMoney(Player player, int amount)
         {
             if (IsAuthorized(player))
             {

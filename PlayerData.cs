@@ -4,18 +4,20 @@ namespace MyRageMPServer
 {
     public class PlayerData
     {
-        public int Id;
-        public string Login;
-        public string PasswordHash;
-        public int Money;
-        public float Health = 100f;
-        public float PosX, PosY, PosZ;
-        public DateTime CreatedAt;
-        public DateTime LastLogin;
-        public int Level = 1;
-        public int Experience = 0;
-        public int AdminLevel;
-        public bool IsMuted;
-        public int FactionId = 0;
+        public int Id{ get; set; }
+        public string Login{ get; set; }
+        public string PasswordHash{ get; set; }
+        public int Money{ get; set; }
+        public float Health{ get; set; }
+        public float PosX{ get; set; }
+        public float PosY{ get; set; }
+        public float PosZ{ get; set; }
+        public DateTime CreatedAt{ get; set; }
+        public DateTime LastLogin{ get; set; }
+        public int Level{ get; set; }
+        public int Experience{ get; set; }
+        public int AdminLevel{ get; set; }
+        public bool IsMuted{ get; set; }
+        public int FactionId{ get; set; }
     }
 }

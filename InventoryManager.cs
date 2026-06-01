@@ -18,7 +18,7 @@ namespace MyRageMPServer
                 _auth = auth;
             }
 
-        public Dictionary<string, ItemDefinition> _items = new Dictionary<string, ItemDefinition>
+        private Dictionary<string, ItemDefinition> _items = new Dictionary<string, ItemDefinition>
             {
                 { "bread", new ItemDefinition { Name = "Хлеб", HealthRestore = 20, Description = "Восстанавливает 20 здоровья", Price = 50 }},
                 { "bandage", new ItemDefinition { Name = "Бинт", HealthRestore = 30, Description = "Восстанавливает 30 здоровья", Price = 100 }},
@@ -143,6 +143,11 @@ namespace MyRageMPServer
                 await RemoveItem(player, item, 1);
                 player.SendChatMessage($"Ты использовал {itemDef.Name}. {itemDef.Description}");
             
+        }
+
+        public Dictionary<string, ItemDefinition> GetItems()
+        {
+            return _items;
         }
     }
 }
