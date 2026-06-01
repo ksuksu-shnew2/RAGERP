@@ -303,14 +303,17 @@ namespace MyRageMPServer
                     return;
                 }
 
-                if (!_inventory.GetItems().ContainsKey(itemKey))
-                {
-                    player.SendChatMessage("Ошибка: Такого предмета нет в магазине.");
-                    return;
-                }
+               var items = _inventory.GetItems();
 
-                var item = _inventory.GetItems()[itemKey];
-                int amount = item.Price * quantity;
+                    if (!items.ContainsKey(itemKey))
+                    {
+                        player.SendChatMessage("Ошибка: Такого предмета нет в магазине.");
+                        return;
+                    }
+
+                    var item = items[itemKey];
+                    int amount = item.Price * quantity;
+
 
                 if (await _auth.TakeMoney(player, amount))
                 {
