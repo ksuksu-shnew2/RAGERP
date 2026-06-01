@@ -1,14 +1,13 @@
-using System;
+
 
 
 namespace MyRageMPServer
 {
     public class ItemDefinition
     {
-        public string Name;
-        public int HealthRestore;
-        public string Description;
-
-        public int Price;
+        public string Name { get; set; }
+        public int HealthRestore { get; set; }
+        public string Description { get; set; }
+        public int Price { get; set; }
     }
 }
