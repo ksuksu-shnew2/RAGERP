@@ -60,27 +60,11 @@ namespace MyRageMPServer
             using (var connection = new MySqlConnection(Config.GetConnectionString()))
             {
                 await connection.OpenAsync();
-
-                var subject = new MySqlCommand("SELECT item_name, quantity FROM inventory WHERE player_id = @player_id and item_name = @item_name", connection);
-                subject.Parameters.AddWithValue("@player_id", playerData.Id); // защита от SQL инъекций
-                subject.Parameters.AddWithValue("@item_name", item);
-
-                if (await subject.ExecuteScalarAsync() != null)
-                {
-                    var updateCmd = new MySqlCommand("UPDATE inventory SET quantity = quantity + @quantity WHERE player_id = @player_id AND item_name = @item_name", connection);
-                    updateCmd.Parameters.AddWithValue("@quantity", quantity);
-                    updateCmd.Parameters.AddWithValue("@player_id", playerData.Id);
-                    updateCmd.Parameters.AddWithValue("@item_name", item);
-                    await updateCmd.ExecuteNonQueryAsync();
-                }
-                else
-                {
-                    var insertCmd = new MySqlCommand("INSERT INTO inventory (player_id, item_name, quantity) VALUES (@player_id, @item_name, @quantity)", connection);
-                    insertCmd.Parameters.AddWithValue("@player_id", playerData.Id);
-                    insertCmd.Parameters.AddWithValue("@item_name", item);
-                    insertCmd.Parameters.AddWithValue("@quantity", quantity);
-                    await insertCmd.ExecuteNonQueryAsync();
-                }
+                var cmd = new MySqlCommand("INSERT INTO inventory (player_id, item_name, quantity) VALUES (@player_id, @item_name, @quantity) ON DUPLICATE KEY UPDATE quantity = quantity + @quantity", connection);
+                cmd.Parameters.AddWithValue("@player_id", playerData.Id);
+                cmd.Parameters.AddWithValue("@item_name", item);
+                cmd.Parameters.AddWithValue("@quantity", quantity);
+                await cmd.ExecuteNonQueryAsync();
             }
         }
 
