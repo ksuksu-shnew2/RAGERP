@@ -29,8 +29,11 @@ namespace MyRageMPServer
                 {
                     targetData.FactionId = factionId;
                     await _auth.UpdatePlayerAsync(targetData);
-                }
+                    target.SendChatMessage($"Тебе выдана фракция: {GetFactionName(factionId)}");
+                    admin.SendChatMessage($"Игроку {target.Name} выдана фракция: {GetFactionName(factionId)}");
 
+                }
+                
             }
         }
 
