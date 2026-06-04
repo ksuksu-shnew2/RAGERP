@@ -9,3 +9,5 @@ win/
 win_server/
 Bootstrapper.dll
 GTANetworkAPI.dll
+bin/
+obj/
