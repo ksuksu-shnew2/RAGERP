@@ -1,0 +1,5 @@
+{
+    "name": "myserver",
+    "description": "My RAGE:MP Server",
+    "main": "index.js"
+}
