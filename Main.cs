@@ -32,6 +32,7 @@ namespace MyRageMPServer
                     player.SendChatMessage("Регистрация успешна! Теперь ты можешь войти с помощью /login.");
                     
                     player.Position = new Vector3(-269.0f, -955.0f, 31.0f);
+                    await DiscordService.SendMessage($"Новый игрок зарегистрировался: {login}");
                 }
                 else
                 {
@@ -192,6 +193,7 @@ namespace MyRageMPServer
                     await _auth.BanPlayerAsync(player, target, reason);
                     target.Kick(reason);
                     player.SendChatMessage($"Игрок {target.Name} был забанен. Причина: {reason}");
+                    await DiscordService.SendMessage($"Игрок {target.Name} был забанен администратором {player.Name}. Причина: {reason}");
                 }
                 else
                 {
@@ -205,6 +207,7 @@ namespace MyRageMPServer
                 {
                     await _auth.UnbanPlayerAsync(targetName);
                     player.SendChatMessage($"Игрок {targetName} был разбанен.");
+                    await DiscordService.SendMessage($"Игрок {targetName} был разбанен администратором {player.Name}.");
                 }
                 else
                 {
@@ -262,6 +265,7 @@ namespace MyRageMPServer
             public async Task BuyCarCommand(Player player, string model)
             {
                await _vehicle.BuyCar(player, model);
+               await DiscordService.SendMessage($"Игрок {player.Name} купил автомобиль {model}.");
             }
         [Command("spawncar")]
             public void SpawnCarCommand(Player player, string model)
