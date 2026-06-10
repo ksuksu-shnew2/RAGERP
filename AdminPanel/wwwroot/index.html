@@ -22,21 +22,26 @@
         <tbody id="players"></tbody>
     </table>
     <script>
+        function loadPlayers() {
         fetch('/api/players')
-            .then(r => r.json())
-            .then(players => {
-                const tbody = document.getElementById('players');
-                players.forEach(p => {
-                    tbody.innerHTML += `<tr>
-                        <td>${p.id}</td>
-                        <td>${p.login}</td>
-                        <td>$${p.money}</td>
-                        <td>${p.level}</td>
-                        <td>${p.factionId}</td>
-                        <td>${p.adminLevel}</td>
-                    </tr>`;
-                });
+        .then(r => r.json())
+        .then(players => {
+            const tbody = document.getElementById('players');
+            tbody.innerHTML = '';
+            players.forEach(p => {
+                tbody.innerHTML += `<tr>
+                    <td>${p.id}</td>
+                    <td>${p.login}</td>
+                    <td>$${p.money}</td>
+                    <td>${p.level}</td>
+                    <td>${p.factionId}</td>
+                    <td>${p.adminLevel}</td>
+                </tr>`;
             });
+        });
+        }
+        loadPlayers();
+        setInterval(loadPlayers, 30000);
     </script>
 </body>
 </html>
