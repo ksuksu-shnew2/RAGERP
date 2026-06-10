@@ -25,20 +25,43 @@ namespace AdminPanel.Controllers
                 {
                     while (await reader.ReadAsync())
                     {
-                        players.Add(new PlayerModel
-                        {
-                            Id = reader.GetInt32("id"),
-                            Login = reader.GetString("login"),
-                            Money = reader.GetInt32("money"),
-                            Level = reader.GetInt32("level"),
-                            AdminLevel = reader.GetInt32("admin_level"),
-                            FactionId = reader.GetInt32("faction_id"),
-                            IsMuted = reader.GetBoolean("is_muted")
-                        });
+                        players.Add(MapPlayer(reader));
                     }
                 }
             }
             return players;
         }
+        [HttpGet("{id}")]
+        public async Task<PlayerModel> GetPlayerId(int id)
+        {
+            
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                var cmd = new MySqlCommand("SELECT id, login, money, level, admin_level, faction_id, is_muted FROM players where id = @id", connection);
+                    cmd.Parameters.AddWithValue("@id", id);
+                using (var reader = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                        return MapPlayer(reader);
+                    return null;
+                }
+            }
+        }   
+
+    private PlayerModel MapPlayer(MySqlDataReader reader)
+        {
+            return new PlayerModel
+            {
+                Id = reader.GetInt32("id"),
+                Login = reader.GetString("login"),
+                Money = reader.GetInt32("money"),
+                Level = reader.GetInt32("level"),
+                AdminLevel = reader.GetInt32("admin_level"),
+                FactionId = reader.GetInt32("faction_id"),
+                IsMuted = reader.GetBoolean("is_muted")
+            };
+        }
     }
+    
 }
