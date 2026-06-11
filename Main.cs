@@ -9,6 +9,8 @@ namespace MyRageMPServer
         public AuthManager _auth = new AuthManager();
         public InventoryManager _inventory;
 
+        public CooldownManager _cooldown;
+
         public FactionManager _faction;
         public VehicleManager _vehicle;
 
@@ -17,6 +19,7 @@ namespace MyRageMPServer
             _inventory = new InventoryManager(_auth);
             _vehicle = new VehicleManager(_auth);
             _faction = new FactionManager(_auth);
+            _cooldown = new CooldownManager();
         }
 
         [ServerEvent(Event.ResourceStart)]
@@ -259,8 +262,17 @@ namespace MyRageMPServer
         [Command("useitem")]
             public async Task UseItemCommand(Player player, string item)
             {
+                
+                if (_cooldown.IsOnCooldown(player, $"use_{item}"))
+                    {
+                        var remaining = _cooldown.GetRemainingCooldown(player, $"use_{item}");
+                        player.SendChatMessage($"Подожди ещё {(int)remaining.TotalSeconds} секунд, прежде чем использовать {item} снова.");
+                        return;
+                    }
+                    _cooldown.SetCooldown(player, $"use_{item}", TimeSpan.FromSeconds(5));
                 await _inventory.UseItem(player, item);
             }
+    
         [Command("buycar")]
             public async Task BuyCarCommand(Player player, string model)
             {
@@ -348,9 +360,19 @@ namespace MyRageMPServer
                         player.SendChatMessage("Ошибка: Эта команда только для полиции.");
                         return;
                     }
+                    if (_cooldown.IsOnCooldown(player, "arrest"))
+                    {
+                        var remaining = _cooldown.GetRemainingCooldown(player, "arrest");
+                        player.SendChatMessage($"Подожди ещё {(int)remaining.TotalSeconds} секунд.");
+                        return;
+                    }
+                    _cooldown.SetCooldown(player, "arrest", TimeSpan.FromSeconds(60));
+
                     string reason = "Арест";
                     target.Kick(reason);
                     player.SendChatMessage($"Игрок {target.Name} был арестован.");
+
+
                 }
 
             [Command("heal")]
@@ -361,9 +383,18 @@ namespace MyRageMPServer
                         player.SendChatMessage("Ошибка: Эта команда только для медиков.");
                         return;
                     }
+                    if (_cooldown.IsOnCooldown(player, "heal"))
+                    {
+                        var remaining = _cooldown.GetRemainingCooldown(player, "heal");
+                        player.SendChatMessage($"Подожди ещё {(int)remaining.TotalSeconds} секунд.");
+                        return;
+                    }
+                    _cooldown.SetCooldown(player, "heal", TimeSpan.FromSeconds(30));
+
                     target.Health = 100;
                     player.SendChatMessage($"Игрок {target.Name} восстановлен до 100% здоровья.");
                     target.SendChatMessage($"Медик {player.Name} восстановил твоё здоровье.");
+
                 }
     }
 }
