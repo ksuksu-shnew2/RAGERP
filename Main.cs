@@ -8,7 +8,7 @@ namespace MyRageMPServer
     {  
         public AuthManager _auth = new AuthManager();
         public InventoryManager _inventory;
-
+        public CaptchaManager _captcha;
         public CooldownManager _cooldown;
 
         public FactionManager _faction;
@@ -19,6 +19,7 @@ namespace MyRageMPServer
             _inventory = new InventoryManager(_auth);
             _vehicle = new VehicleManager(_auth);
             _faction = new FactionManager(_auth);
+            _captcha = new CaptchaManager();
             _cooldown = new CooldownManager();
         }
 
@@ -30,6 +31,11 @@ namespace MyRageMPServer
         [Command("register")]
             public async Task RegisterCommand(Player player, string login, string password)
             {
+                if (!_captcha.IsVerified(player))
+                {
+                    player.SendChatMessage("Ошибка: Сначала пройди капчу через /captcha.");
+                    return;
+                }
                 if (await _auth.Register(player, login, password))
                 {
                     player.SendChatMessage("Регистрация успешна! Теперь ты можешь войти с помощью /login.");
@@ -42,6 +48,15 @@ namespace MyRageMPServer
                     player.SendChatMessage("Ошибка: Логин уже существует.");
                 }
             }
+        [Command("captcha")]
+        public void CaptchaCommand(Player player, string input)
+        {
+            if (_captcha.VerifyCaptcha(player, input))
+                {
+                    _captcha.SetVerified(player);
+                    player.SendChatMessage("Капча пройдена! Теперь можешь зарегистрироваться.");
+                }
+        }
         [Command("login")]
             public async Task LoginCommand(Player player, string login, string password)
             {
@@ -145,6 +160,7 @@ namespace MyRageMPServer
             }
             player.SendChatMessage("Введи /register логин пароль или /login логин пароль для авторизации.");
             player.TriggerEvent("playerJoinedServer", player.Name);
+            _captcha.GenerateCaptcha(player);
         }
 
         [ServerEvent(Event.PlayerDisconnected)]
@@ -160,6 +176,7 @@ namespace MyRageMPServer
                 }
                 
                 _auth.Logout(player); 
+                _captcha.Remove(player);
                     
             }
         [Command("kick")]
